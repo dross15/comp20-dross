@@ -1,0 +1,53 @@
+/*--screen width >1200 pixels--*/
+@media screen
+	and (min-width: 1201px) {
+		.garfield {width: 393px; height: 125px; background: url(garfield.gif) 0 0;}
+}
+
+/*--screen width <= 1200 pixels and >=1100 pixels--*/
+@media screen
+	and (max-width: 1200px)
+	and (min-width: 1101px) {
+		.garfield {width: 192px; height: 125px; background: url(garfield.gif) -408px 0;}
+}
+
+/*--screen width >1000 pixels and <=1100 pixels--*/
+@media screen
+	and (max-width: 1100px)
+	and (min-width: 1001px) {
+		.garfield {width: 192px; height: 125px; background: url(garfield.gif) 0 -136px;}
+}
+
+/*--screen width >900 pixels and <=1000 pixels--*/
+@media screen
+	and (max-width: 1000px)
+	and (min-width: 901px) {
+		.garfield {width: 192px; height: 125px; background: url(garfield.gif) -206px -136px;}
+}
+
+/*--screen width >800 pixels and <=900 pixels--*/
+@media screen
+	and (max-width: 900px)
+	and (min-width: 801px) {
+		.garfield {width: 192px; height: 125px; background: url(garfield.gif) -408px -136px;}
+}
+
+/*--screen width >700 pixels and <=800 pixels--*/
+@media screen
+	and (max-width: 800px)
+	and (min-width: 701px) {
+		.garfield {width: 192px; height: 125px; background: url(garfield.gif) 0 -272px;}
+}
+
+/*--screen width >600 pixels and <=700 pixels--*/
+@media screen
+	and (max-width: 700px)
+	and (min-width: 601px) {
+		.garfield {width: 192px; height: 125px; background: url(garfield.gif) -206px -272px;}
+}
+
+/*--screen width <600 pixels--*/
+@media screen
+	and (max-width: 600px){
+		.garfield {width: 192px; height: 125px; background: url(garfield.gif) -408px -272px;}
+}
