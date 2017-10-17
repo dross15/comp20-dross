@@ -23,9 +23,7 @@ request.onreadystatechange = function(){
 		if(request.readyState == 4 && request.status == 200){
 			rawData = request.responseText;
 			messages = JSON.parse(rawData);
-			
 			for(i = 0; i < messages.landmarks.length; i++){
-				
 				landmark = new google.maps.LatLng(messages.landmarks[i].geometry.coordinates[0], messages.landmarks[i].geometry.coordinates[1]);
 		
 				var newmarker = new google.maps.Marker({
@@ -40,10 +38,8 @@ request.onreadystatechange = function(){
 				infowindow.open(map, newmarkermarker);
 				});
 			}
-
-			console.log(messages);
 		}	
-	}	
+}	
 var me = new google.maps.LatLng(myLat, myLng);
 var myOptions = {
 	zoom: 13, // The larger the zoom number, the bigger the zoom
