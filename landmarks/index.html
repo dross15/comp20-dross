@@ -13,62 +13,41 @@
 <div id="map_canvas"></div>
 
 <script>
+
 var myLat = 0;
 var myLng = 0;
-var request = new XMLHttpRequest();
-var url = 'https://defense-in-derpth.herokuapp.com/sendLocation';
-request.open('POST', url, true);
-request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-request.onreadystatechange = function(){
-		if(request.readyState == 4 && request.status == 200){
-			rawData = request.responseText;
-			messages = JSON.parse(rawData);
-			for(i = 0; i < messages.landmarks.length; i++){
-				landmark = new google.maps.LatLng(messages.landmarks[i].geometry.coordinates[0], messages.landmarks[i].geometry.coordinates[1]);
-		
-				var newmarker = new google.maps.Marker({
-				position: landmark,
-				title: messages.landmarks[i].properties.Location_Name
-				});
-				
-				newmarker.setMap(map);
-				
-				google.maps.event.addListener(marker, 'click', function() {
-				infowindow.setContent(newmarker.title);
-				infowindow.open(map, newmarkermarker);
-				});
-			}
-		}	
-}	
 var me = new google.maps.LatLng(myLat, myLng);
+var map;
+var marker;
+var infowindow = new google.maps.InfoWindow();
+	
 var myOptions = {
 	zoom: 13, // The larger the zoom number, the bigger the zoom
 	center: me,
 	mapTypeId: google.maps.MapTypeId.ROADMAP
 };
-var map;
-var marker;
-var infowindow = new google.maps.InfoWindow();
+
 function init()
 {
 	map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
 	getMyLocation();
 }
+	
 function getMyLocation() {
 	if (navigator.geolocation) { // the navigator.geolocation object is supported on your browser
 		navigator.geolocation.getCurrentPosition(function(position) {
 			myLat = position.coords.latitude;
 			myLng = position.coords.longitude;
-			renderMap();
-			var params = "login=uxHHQ3nT&lat=" + myLat + "&lng=" + myLng;
-			request.send(params);
+			addMeToMap();
+			changeMap();
 		});
 	}
 	else {
 		alert("Geolocation is not supported by your web browser.  What a shame!");
 	}
 }
-function renderMap()
+	
+function addMeToMap()
 {
 	me = new google.maps.LatLng(myLat, myLng);
 	
@@ -87,6 +66,46 @@ function renderMap()
 		infowindow.setContent(marker.title);
 		infowindow.open(map, marker);
 	});
+}
+	
+function changeMap(){
+var request = new XMLHttpRequest();
+console.log(myLat, myLng);
+var params = "login=uxHHQ3nT&lat=" + myLat + "&lng=" + myLng;
+var url = 'https://defense-in-derpth.herokuapp.com/sendLocation';
+request.open('POST', url, true);
+request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+request.onreadystatechange = function(){
+		if(request.readyState == 4 && request.status == 200){
+			rawData = request.responseText;
+			messages = JSON.parse(rawData);
+			console.log(messages);
+			addLandmarks(messages);
+			}
+		}
+request.send(params);
+}
+	
+function addLandmarks (messages) {
+	for(i = 0; i < messages.landmarks.length; i++){
+				landmark = new google.maps.LatLng(messages.landmarks[i].geometry.coordinates[1], messages.landmarks[i].geometry.coordinates[0]);
+		
+				var image = 'images/british-museum-512.png';
+				marker_landmark = new google.maps.Marker({
+				position: landmark,
+				title: messages.landmarks[i].properties.Location_Name,
+				icon: image
+				});
+				
+				marker_landmark.setMap(map);
+				
+				google.maps.event.addListener(marker_landmark, 'click', function() {
+				console.log(marker_landmark.title);
+				infowindow.setContent(marker_landmark.title);
+				infowindow.open(map, marker_landmark);
+				})
+	
+	}
 }
 </script>
 </body>
