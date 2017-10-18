@@ -88,22 +88,27 @@ request.send(params);
 	
 function addLandmarks (messages) {
 	for(i = 0; i < messages.landmarks.length; i++){
-				landmark = new google.maps.LatLng(messages.landmarks[i].geometry.coordinates[1], messages.landmarks[i].geometry.coordinates[0]);
+		
+				var landmark = messages.landmarks[i];
+		
+				landmark_cord = new google.maps.LatLng(landmark.geometry.coordinates[1], landmark.geometry.coordinates[0]);
 		
 				var image = 'images/british-museum-512.png';
 				marker_landmark = new google.maps.Marker({
-				position: landmark,
-				title: messages.landmarks[i].properties.Location_Name,
+				position: landmark_cord,
+				title: landmark.properties.Details,
 				icon: image
 				});
 				
 				marker_landmark.setMap(map);
 				
-				google.maps.event.addListener(marker_landmark, 'click', function() {
-				console.log(marker_landmark.title);
+				(function(marker_landmark, landmark){
+				
+				google.maps.event.addListener(marker_landmark, 'click', function(e) {
 				infowindow.setContent(marker_landmark.title);
 				infowindow.open(map, marker_landmark);
-				})
+				});
+				})(marker_landmark, landmark);
 	
 	}
 }
