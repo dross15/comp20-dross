@@ -32,7 +32,6 @@ function getMyLocation() {
 	
 function changeMap(){
 var request = new XMLHttpRequest();
-console.log(myLat, myLng);
 var params = "login=uxHHQ3nT&lat=" + myLat + "&lng=" + myLng;
 var url = 'https://defense-in-derpth.herokuapp.com/sendLocation';
 request.open('POST', url, true);
@@ -41,7 +40,6 @@ request.onreadystatechange = function(){
 		if(request.readyState == 4 && request.status == 200){
 			rawData = request.responseText;
 			messages = JSON.parse(rawData);
-			console.log(messages);
 			addLandmarks(messages);
 			}
 		}
