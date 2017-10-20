@@ -11,12 +11,14 @@ var myOptions = {
 	mapTypeId: google.maps.MapTypeId.ROADMAP
 };
 
+//renders map
 function init()
 {
 	map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
 	getMyLocation();
 }
 	
+//gets my location via navigator
 function getMyLocation() {
 	if (navigator.geolocation) { // the navigator.geolocation object is supported on your browser
 		navigator.geolocation.getCurrentPosition(function(position) {
@@ -30,6 +32,7 @@ function getMyLocation() {
 	}
 }
 	
+//grabs data from API
 function changeMap(){
 var request = new XMLHttpRequest();
 var params = "login=uxHHQ3nT&lat=" + myLat + "&lng=" + myLng;
@@ -46,6 +49,7 @@ request.onreadystatechange = function(){
 request.send(params);
 }
 	
+//adds landmarks to map and updates closest landmark
 function addLandmarks (messages) {
 	nearest_landmark;
 	var landmark = messages.landmarks[0];
@@ -58,11 +62,10 @@ function addLandmarks (messages) {
 				landmark = messages.landmarks[i];
 		
 				landmark_cord = new google.maps.LatLng(landmark.geometry.coordinates[1], landmark.geometry.coordinates[0]);
-		
 				if(google.maps.geometry.spherical.computeDistanceBetween(my_cordinates, landmark_cord)/1609.34 < nearest_distance) {
-				nearest_landmark = landmark;
-				nearest_distance = google.maps.geometry.spherical.computeDistanceBetween(my_cordinates, landmark_cord)/1609.34
-				nearest_landmark_cord = landmark_cord;
+					nearest_landmark = landmark;
+					nearest_distance = google.maps.geometry.spherical.computeDistanceBetween(my_cordinates, landmark_cord)/1609.34
+					nearest_landmark_cord = landmark_cord;
 				}
 		
 				var image = 'images/british-museum-512.png';
@@ -74,6 +77,7 @@ function addLandmarks (messages) {
 				
 				marker_landmark.setMap(map);
 				
+				//callback resource: https://stackoverflow.com/questions/3059044/google-maps-js-api-v3-simple-multiple-marker-example
 				(function(marker_landmark, landmark){
 				
 				google.maps.event.addListener(marker_landmark, 'click', function(e) {
@@ -87,6 +91,7 @@ function addLandmarks (messages) {
 	addPeopleToMap(messages);
 }
 
+//adds me to map and renders polyline to closest landmark
 function addMeToMap(nearest_landmark, nearest_distance)
 {
 	me = new google.maps.LatLng(myLat, myLng);
@@ -103,10 +108,11 @@ function addMeToMap(nearest_landmark, nearest_distance)
 		
 	// Open info window on click of marker
 	google.maps.event.addListener(marker, 'click', function() {
-		infowindow.setContent(marker.content);
-		infowindow.open(map, marker);
+		infowindow.setContent(this.content);
+		infowindow.open(map, this);
 	});
 	
+	//polymap resource: https://developers.google.com/maps/documentation/javascript/examples/polyline-simple
 	var pathCoordinates = [
 		{lat: myLat, lng: myLng},
 		{lat: nearest_landmark.geometry.coordinates[1], lng: nearest_landmark.geometry.coordinates[0]}
@@ -123,6 +129,7 @@ function addMeToMap(nearest_landmark, nearest_distance)
         path.setMap(map);
 }
 
+//adds people to the map and calculates distance between me and people
 function addPeopleToMap(messages)
 {
 	my_cordinates = new google.maps.LatLng(myLat, myLng);
@@ -132,9 +139,9 @@ function addPeopleToMap(messages)
 		
 				person_cord = new google.maps.LatLng(person.lat, person.lng);
 		
+				//computes distance between me and different people
 				person_distance = google.maps.geometry.spherical.computeDistanceBetween(my_cordinates, person_cord)/1609.34
 				
-		
 				var image = 'images/person-icon-red-4.png';
 				marker_person = new google.maps.Marker({
 				position: person_cord,
@@ -143,7 +150,7 @@ function addPeopleToMap(messages)
 				});
 				
 				marker_person.setMap(map);
-				
+		
 				(function(marker_person, person){
 				
 				google.maps.event.addListener(marker_person, 'click', function(e) {
