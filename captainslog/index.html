@@ -17,7 +17,8 @@
 			})	  
 		})
 		
-        function reload() {
+        /*--- loops through local storage in reverse order to display most recent entry first ---*/
+		function reload() {
 			elem = document.getElementById("log");
 			output = "";
 			console.log(localStorage.length);
@@ -27,7 +28,9 @@
 			elem.innerHTML = output;
 		}
 		
+		/*--- stores entry in local storage with key as time ---*/
 		function store(){
+			/*--- source for date: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date ---*/
 			var date = new Date();
 			date.toString();
 			txt = date + ' - ' + document.getElementById("msg").value;
