@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Captain's Log</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+		$(document).ready(function(){
+			/*--- source for enter key: https://stackoverflow.com/questions/979662/how-to-detect-pressing-enter-on-keyboard-using-jquery ---*/
+			$('#msg').keypress(function(e){
+				if(e.which == 13){
+				store();
+				}
+			})	  
+		})
+		
+        function reload() {
+			elem = document.getElementById("log");
+			output = "";
+			console.log(localStorage.length);
+			for (var i = localStorage.length; i > 0; i--) {
+				output = output + "<p>" + localStorage.getItem(localStorage.key(i-1)) + "</p>\n"
+			}
+			elem.innerHTML = output;
+		}
+		
+		function store(){
+			var date = new Date();
+			date.toString();
+			txt = date + ' - ' + document.getElementById("msg").value;
+			console.log(date.getTime());
+			localStorage[date.getTime()] = txt;
+			reload();
+		}
+    </script>
+</head>
+
+<body>
+    <h1>Captain's Log</h1>
+    <h3>New entry: <input type="text" id="msg" name="msg" size="30" /></h3>
+    <div id="log"></div>
+</body>
+</html>
