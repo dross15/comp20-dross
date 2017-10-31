@@ -17,25 +17,29 @@
 			})	  
 		})
 		
-        /*--- loops through local storage in reverse order to display most recent entry first ---*/
+        /*--- loops through local storage and assembles sorted array to loop through in reverse order to display messages ---*/
 		function reload() {
 			elem = document.getElementById("log");
 			output = "";
-			console.log(localStorage.length);
-			for (var i = localStorage.length; i > 0; i--) {
-				output = output + "<p>" + localStorage.getItem(localStorage.key(i-1)) + "</p>\n"
+			var localStorageArray = new Array();
+			for (var i = 0; i < localStorage.length; i++) {
+				localStorageArray[i] = localStorage.key(i) + localStorage.getItem(localStorage.key(i));
 			}
-			elem.innerHTML = output;
+			var sortedArray = localStorageArray.sort();
+			toDisplay = '';
+			for(var j = sortedArray.length; j > 0; j--){
+				toDisplay+=sortedArray[j-1] + '</br>';
+			}
+			elem.innerHTML = toDisplay;
 		}
 		
-		/*--- stores entry in local storage with key as time ---*/
+		/*--- stores entry in local storage with key as date ---*/
 		function store(){
 			/*--- source for date: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date ---*/
 			var date = new Date();
 			date.toString();
-			txt = date + ' - ' + document.getElementById("msg").value;
-			console.log(date.getTime());
-			localStorage[date.getTime()] = txt;
+			txt = ' - ' + document.getElementById("msg").value;
+			localStorage[date] = txt;
 			reload();
 		}
     </script>
