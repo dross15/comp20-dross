@@ -36,7 +36,7 @@ function getMyLocation() {
 function changeMap(){
 var request = new XMLHttpRequest();
 var params = "login=uxHHQ3nT&lat=" + myLat + "&lng=" + myLng;
-var url = 'https://defense-in-derpth.herokuapp.com/sendLocation';
+var url = 'https://shielded-plains-68496.herokuapp.com/sendLocation';
 request.open('POST', url, true);
 request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 request.onreadystatechange = function(){
