@@ -11,21 +11,21 @@
 <h1>Introduction</h1>
 <p>This product displays nearest user check ins and nearest historical landmarks in a one mile vicinity from the user accessing the application. I was hired to find three security flaws within the application and document these findings as demonstrated below.</p>
 <h1>Methodology</h1>
-<p>In regards to finding these flaws I used my notes from COMP20, discussions with TA Michael Morisi and instructor Ming Chow, as well as posts from Piazza. When I actually executed these attacks I used Postman as well as basic query strings added to the application URL.</p>
+<p>In regard to finding these flaws I used my notes from COMP20, discussions with TA Michael Morisi and instructor Ming Chow, the OWASP TOP 10 list, as well as posts from Piazza. When I actually executed these attacks I used Postman as well as basic query strings added to the application URL.</p>
 <h1>Abstract of Findings</h1>
-<p>The first of the three issues found within the application is that it is vulnerable to a hacker performing constant, repetetive changes to the database, which would crash the application and prevent users from accessing it. Second, is that it is possible that hackers could inject malicious code into the application and obtain confidential information. And third, is that all other websites have the potential to access certain data that our site makes public when it passes information from page to page via the browswer.</p>
+<p>The first of the three issues found within the application is that it is vulnerable to a hacker performing constant, repetetive changes to the database, which would crash the application and prevent users from accessing it. Second, is that it is possible that hackers could inject malicious code into the application and obtain confidential information. And third, is that all other websites have the potential to access certain data that the application makes public when it passes information from page to page via the browswer.</p>
 	<h3>Issue #1</h3>
 	<p><b>Issue: </b>Denial of Service Attack</p>
 	<p><b>Description:</b> A denial of service attack takes place when a user brings down the application via rapid and constant calls to the servers.</p>
-	<p><b>Location:</b> This is an issue with heroku and the database. It is viable that someone could run an infinite loop that keeps hitting the database with get and post requests and bring down the app so that users cannot access it.</p>
-	<p><b>Severity:</b> This is a medium severity issue, as it is not difficult to execute and it would ultimately bring down the entire application, but it would not lead to confidential data being uncovered.</p>
+	<p><b>Location:</b> This is an issue with the API. It is viable that someone could run an infinite loop that keeps hitting the database with get and post requests and bring down the app so that users cannot access it.</p>
+	<p><b>Severity:</b> This is a high severity issue, as it is not difficult to execute and it would ultimately bring down the entire application.</p>
 	<p><b>Proof of Vulnerability and Picture:</b></p>
 	<img src="images/security3.png" alt="Image of infinite loop in postman which sends a post request to server and crashes application"/>
 	<p>Above is an image of how to execute an infinite loop in Postman</p>
-	<p><b>Resolution:</b> There is no concrete answer in regard to how to prevent this sort of attack- however it essential that the network be monitored by an educated team, such that if this sort of attack takes place, the team has a plan ready to combat the attack.</p>
+	<p><b>Resolution:</b> One option for combatting a DOS attack is through rate limiting- meaning a limit is placed on the amount of requests that can be made per user to an API per cycle (can be a designated time i.e. 15 minutes). While this does not prevent an attack completely it is a good step towards making the application less suscetible to a DOS attack. Further, an API key can be implemented as well, which helps identify the calling program, developer, or user of the site. This also helps prevent DOS attacks as it allows the owner of the API to identify and ban malicious users.</p>
 	<h3>Issue #2</h3>
 	<p><b>Issue: Cross-site Scripting</b><p>
-	<p><b>Description: </b> Cross-site scripting occurs when malicious scripts are injected into websites. In this case, the code does not strip the contents of a get request of special characters such that it is possible to perform unintended queries on the database and access information that should not be accessible.</p>
+	<p><b>Description: </b> Cross-site scripting occurs when malicious scripts are injected into web applications. In this case, the source code does not strip the contents of a get request of special characters such that it is possible to perform unintended queries on the database and access information that should not be accessible.</p>
 	<p><b>Location:</b> This issue was found in the URL bar- specifically when performing the checkins.json get request.</p>
 	<p><b>Severity:</b> This is a high severity issue as it is one where confidential information could easily become public when it should remain hidden.</p>
 	<p><b>Proof of Vulnerability and Picture:</b> </p>
@@ -39,11 +39,13 @@
 	<p><b>Severity: </b> This is a high severity issue because it allows any site to send a XHR request  to the site and access the server's response, which could include confidential information like authentication information (particularly if it is used by the browser between sessions i.e. cookie-based sessions).</p>
 	<p><b>Proof of Vulnerability and Picture:</b></p>
 	<img src="images/security2.png" alt="Image of source code which sets Access-Control-Allow_Origin to *"/>
-	<p><b>Resolution:</b>Specify the sites that have permission to send XHR requests to the site and access the server's response.</p>
+	<p><b>Resolution:</b>Specify the sites that have permission to send XHR requests to the site and access the server's response. Eg: Access-Control-Allow-Origin: http://foo.example</p>
 <h1>Conclusion</h1>
-In terms of fixing the issues listed above, particularly number 2 and 3, it is critical that any input be stripped of characters which can be used to inject unwanted code into the application, and that within CORS the Access-Control-Allow-Origin be altered to trusted sites. In regard to number 1, it is crucial that any application have a security team and plan in place such that if an attack of any type takes place there are people who are ready to combat the attack and get the app back to its normal state as quickly as possible. Moving forward I would suggest making the simple fixes for issues 2 and 3, as well as making sure a security plan is put together to prevent and fight against any future attacks. 
+In terms of fixing the issues listed above, particularly number 2 and 3, it is critical that any input be stripped of characters which can be used to inject unwanted code into the application, and that within CORS the Access-Control-Allow-Origin be altered to trusted sites. In regard to number 1, it is crucial that any application implement a rate limiter and also an API key. Moving forward I would suggest making the fixes for all 3 issues to work towards preventing any future attacks. 
 <h1>References</h1>
-	<a href="https://msdn.microsoft.com/en-us/library/cc750213.aspx">PREVENTING DENIAL OF SERVICE ATTACK</a>
+	<a href="https://www.owasp.org/index.php/Category:OWASP_Top_Ten_Project">OWASP TOP 10</a>
+	<a href="https://developer.twitter.com/en/docs/basics/rate-limiting">RATE LIMITING</a>
+	<a href="https://en.wikipedia.org/wiki/Application_programming_interface_key">API KEY</a>
 	<a href="https://stackoverflow.com/questions/12001269/what-are-the-security-risks-of-setting-access-control-allow-origin">CORS</a><br/>
 	<a href="https://www.getpostman.com/docs/postman/scripts/branching_and_looping">LOOP IN POSTMAN</a>
 </body>
